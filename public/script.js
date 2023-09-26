@@ -1,4 +1,67 @@
-const result = document.querySelector(".result")
+const result = document.querySelector(".resultDropdown")
+const taskResult = document.querySelector(".taskResult")
+result.onchange = async function() {
+    if(result.value != 'default') {
+        try{
+            const selectedID = result.value;
+            console.log(selectedID)
+            const {data} = await axios.get('/api/people')
+            console.log(data.data.length)
+            for(let i = 0; i < data.data.length; i++) {
+                if(data.data[i].id == selectedID) {
+                    console.log('running')
+                    if(data.data[i].check == false) {
+                        taskResult.innerHTML = `<div class="divider">
+                            <h3>${data.data[i].name}</h3>
+                            <h5>${data.data[i].description}</h5>
+                        </div>
+                        <div class="checkContainer">
+                            <label for="check" class="checkLabel">Complete:</label>
+                            <input type="checkbox" id="check" name="check" onclick="check(${data.data[i].id})">
+                        </div>`
+                    }else {
+                        taskResult.innerHTML = `<div class="divider">
+                            <h3 class="crossout">${data.data[i].name}</h3>
+                            <h5 class="crossout">${data.data[i].description}</h5>
+                        </div>
+                        <div class="checkContainer">
+                            <label for="check" class="checkLabel">Complete:</label>
+                            <input type="checkbox" id="check" name="check" onclick="check(${data.data[i].id})">
+                        </div>`
+                    }
+                    
+                }
+            }
+        
+        }catch (error) {
+            // formAlert.textContent = error.response.data.msg
+            console.log(error)
+        }
+        
+        
+    }
+}
+
+
+
+async function check(id){
+    const currentCheck = document.getElementById(`check`)
+    if(currentCheck.checked){
+        fetch(`/api/people/${currentPersonID}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({check: true})
+        })
+    }else {
+        fetch(`/api/people/${currentPersonID}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({check: false})
+        })
+    }
+    
+}
+
 
 const fetchPeople = async() =>{
     try{
@@ -6,9 +69,9 @@ const fetchPeople = async() =>{
         console.log(data)
 
         const people = data.data.map((person)=>{
-            return `<option>${person.name}</option>`
+            return `<option value='${person.id}'>${person.name}</option>`
         })
-        result.innerHTML = people.join("")
+        result.innerHTML = `<option value='default'>Select</option>${people.join("")}`
     }catch (error) {
         formAlert.textContent = error.response.data.msg
     }

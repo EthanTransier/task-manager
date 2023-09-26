@@ -351,5 +351,46 @@ h5 + h5 {
   width: 600px;
   text-align: center;
 }
-
+.taskResult{
+  width: 90vw;
+  max-width: 600px;
+  margin: 0 auto;
+  margin-top: 5rem;
+  background: var(--white);
+  border-radius: var(--borderRadius);
+  box-shadow: var(--shadow-2);
+  padding: 2rem 2.5rem;
+  display: flex;
+}
+.resultDropdown{
+  margin-left: 1rem;
+}
+.divider{
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+}
+.checkContainer{
+  display: flex;
+  flex-direction: row;
+}
+.checkLabel{
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0;
+  margin-right: 1rem;
+}
+.crossout{
+  text-decoration: line-through;
+}
+.dropdownContainer{
+  display: flex;
+  margin-top: 1rem;
+  align-items: center;
+}
+.tasksLabel{
+  margin-bottom: 0;
+}
 

@@ -20,7 +20,12 @@ router.post('/', (req, res)=>{
 
 router.put('/:id', (req, res) =>{
     const {id} = req.params
-    const {name} = req.body
+    const {name} = req.body.name;
+    if(req.body.check){
+        const {check} = req.body.check
+    }
+
+    
     const person = tasks.find((person) => person.id === Number(id))
 
     if(!person){
@@ -30,6 +35,9 @@ router.put('/:id', (req, res) =>{
     const newtasks = tasks.map((person)=>{
         if(person.id === Number(id)){
             person.name = name;
+        }
+        if(req.body.check){
+            person.check = check;
         }
         return person
     })
