@@ -20,11 +20,9 @@ router.post('/', (req, res)=>{
 
 router.put('/:id', (req, res) =>{
     const {id} = req.params
-    const {name} = req.body.name;
-    if(req.body.check){
-        const {check} = req.body.check
-    }
-
+    const {name, check} = req.body;
+    console.log('got request')
+    // console.log(check)
     
     const person = tasks.find((person) => person.id === Number(id))
 
@@ -36,7 +34,7 @@ router.put('/:id', (req, res) =>{
         if(person.id === Number(id)){
             person.name = name;
         }
-        if(req.body.check){
+        if(check){
             person.check = check;
         }
         return person

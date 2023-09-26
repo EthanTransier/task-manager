@@ -361,6 +361,29 @@ h5 + h5 {
   box-shadow: var(--shadow-2);
   padding: 2rem 2.5rem;
   display: flex;
+  flex-direction: column;
+}
+.greyedOut{
+  background-color: grey;
+}
+.allContainer{
+  width: 100%;
+  display: flex;
+}
+.buttonContainer{
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+.disabled{
+  background-color: rgb(56, 56, 56);
+  pointer-events: none;
+  color: grey;
+}
+.disabled:hover{
+  color: grey;
+  background: rgb(56, 56, 56);
+  box-shadow: var(--shadow-1);
 }
 .resultDropdown{
   margin-left: 1rem;
@@ -370,6 +393,8 @@ h5 + h5 {
   flex-direction: column;
   width: 70%;
 }
+
+
 .checkContainer{
   display: flex;
   flex-direction: row;
@@ -393,4 +418,10 @@ h5 + h5 {
 .tasksLabel{
   margin-bottom: 0;
 }
+
+/* .result2{
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+} */
 

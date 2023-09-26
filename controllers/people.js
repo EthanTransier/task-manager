@@ -22,20 +22,25 @@ const createPeople = (req,res)=>{
 // Post function for update people
 const updatePeople = (req,res)=>{
     const {id} = req.params
-    const {name} = req.body
+    const {name, check, desc} = req.body;
+    console.log('got request')
+    // console.log(check)
+    
     const person = tasks.find((person) => person.id === Number(id))
 
     if(!person){
         return res.json({success:false, data:[]})
     }
 
-    const newPeople = tasks.map((person)=>{
+    const newtasks = tasks.map((person)=>{
         if(person.id === Number(id)){
             person.name = name;
+            person.check = check;
+            person.description = desc;
         }
         return person
     })
-    res.status(202).json({data: newPeople, success:true})
+    res.status(202).json({data: newtasks, success:true})
 }
 
 const deletePerson = (req,res)=>{
