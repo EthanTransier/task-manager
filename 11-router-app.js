@@ -1,8 +1,9 @@
 const express = require('express');
-require('dotenv').config();
-require('./db/connect')
 const app = express();
 
+// require('dotenv').config();
+const connectDB = require('./db/connect')
+const morgan = require('morgan')
 const people = require('./routes/people-controller')
 const auth = require('./routes/auth');
 const connectDB = require('./db/connect');
@@ -12,12 +13,14 @@ app.use(express.static('./public'))
 
 app.use(express.urlencoded({ extended: false}));
 
+connectDB()
+
 app.use(express.json())
 
 app.use('/api/people', people)
 app.use('/login', auth)
 
-const initServer = async ()=>{
+const serverInit = async ()=>{
     try{
         await connectDB(process.env.MONGO_URI);
         app.listen(7000, ()=>{
@@ -28,5 +31,5 @@ const initServer = async ()=>{
     }
 }
 
-initServer()
 
+serverInit()

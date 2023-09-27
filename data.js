@@ -1,4 +1,9 @@
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+dotenv.config();
+mongoose.connect(process.env.MONGO_URI)
 
+const task = require('./models/task.js');
 const tasks = [
   {
     id: 1,
@@ -62,4 +67,12 @@ const tasks = [
   },
 ];
 
-module.exports = {tasks};
+// async function test(){
+//     for(let i=0; i<tasks.length; i++){
+//         const insert = new task(tasks[i]);
+//         await insert.save();
+//     }
+// } 
+
+
+// test();
