@@ -7,13 +7,14 @@ async function updatedResult() {
     if(result.value != 'default') {
         try{
             const selectedID = result.value;
-            console.log(selectedID)
+            // console.log(selectedID)
             const {data} = await axios.get('/api/people')
-            console.log(data.data.length)
+            // console.log(data.data.length)
             for(let i = 0; i < data.data.length; i++) {
                 if(data.data[i].id == selectedID) {
-                    console.log('running')
+                    // console.log('running')
                     if(data.data[i].check == false) {
+                        // console.log(data.data[i].description)
                         taskResult.innerHTML = `
                         <section class="allContainer">
                             <div class="divider">
@@ -32,7 +33,7 @@ async function updatedResult() {
                         `
                         taskResult.classList.remove('greyedOut')
                     }else {
-                        console.log('checked')
+                        // console.log(data.data[i].description)
                         taskResult.innerHTML = `
                         <section class="allContainer">
                             <div class="divider">
@@ -73,23 +74,26 @@ async function check(id){
     for(let i = 0; i < data.data.length; i++) {
         if(id == data.data[i].id){
             foundName = data.data[i].name
+            foundDesc = data.data[i].description
         }
     }
-
+    console.log(foundDesc)
     if(currentCheck.checked){
+        // console.log('running check checked')
         fetch(`/api/people/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({name: foundName, check: true})
+            body: JSON.stringify({name: foundName, check: true, description: foundDesc})
         })
         updatedResult()
         // const {data} = await axios.get('/api/people')
         
-    }else {
+    }else if(!currentCheck.checked){
+        // console.log('running check Not checked')
         fetch(`/api/people/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({name: foundName, check: false})
+            body: JSON.stringify({name: foundName, check: false, description: foundDesc})
         })
         updatedResult()
     }
@@ -100,7 +104,7 @@ async function check(id){
 const fetchPeople = async() =>{
     try{
         const {data} = await axios.get('/api/people')
-        console.log(data)
+        // console.log(data)
 
         const people = data.data.map((person)=>{
             return `<option value='${person.id}'>${person.name}</option>`
@@ -118,35 +122,35 @@ const btn = document.querySelector(".submit-btn")
 const input = document.querySelector(".form-input")
 const formAlert = document.querySelector(".form-alert")
 
-btn.addEventListener("click", async (e)=>{
-    e.preventDefault()
-    const nameValue = input.value
+// btn.addEventListener("click", async (e)=>{
+//     e.preventDefault()
+//     const nameValue = input.value
     
-    try {
-        if(editMode == false) {
-            const {data} = await axios.post("api/people", {name: nameValue})
-            const h5 = document.createElement("h5");
-            h5.textContent = data.person;
-            result.appendChild(h5)
-            fetchPeople();
-        }else {
-            const name = input.value;
-            console.log(currentPersonID)
-            fetch(`/api/people/${currentPersonID}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json'},
-                body: JSON.stringify({name: name})
-            })
-            fetchPeople();
-            editMode = false;
-        }
+//     try {
+//         if(editMode == false) {
+//             const {data} = await axios.post("api/people", {name: nameValue})
+//             const h5 = document.createElement("h5");
+//             h5.textContent = data.person;
+//             result.appendChild(h5)
+//             fetchPeople();
+//         }else {
+//             const name = input.value;
+//             console.log(currentPersonID)
+//             fetch(`/api/people/${currentPersonID}`, {
+//                 method: 'PUT',
+//                 headers: { 'Content-Type': 'application/json'},
+//                 body: JSON.stringify({name: name})
+//             })
+//             fetchPeople();
+//             editMode = false;
+//         }
         
-    } catch (error){
-        console.log(error)
-        // formAlert.textContent = error.response.data.msg
-    }
-    input.value = ""
-})
+//     } catch (error){
+//         console.log(error)
+//         // formAlert.textContent = error.response.data.msg
+//     }
+//     input.value = ""
+// })
 
 var editMode = false;
 var currentPersonID = '';

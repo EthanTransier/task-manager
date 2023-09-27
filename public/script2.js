@@ -6,7 +6,9 @@ const fetchPeople = async() =>{
         console.log(data)
 
         const people = data.data.map((person)=>{
+            console.log('checking the person')
             if(person.check == true){
+                console.log('test 1')
                 return `
                 <section class="taskResult greyedOut">
                     <section class="allContainer">
@@ -16,7 +18,7 @@ const fetchPeople = async() =>{
                             </div>
                             <div class="checkContainer">
                                 <label for="check" class="checkLabel">Complete:</label>
-                                <input type="checkbox" id="check" name="check" onclick="check(${person.id})" checked>
+                                <input type="checkbox" id="check${person.id}" name="check" onclick="check(${person.id})" checked>
                             </div>
                         </section>
                         <div class='buttonContainer'>
@@ -34,7 +36,7 @@ const fetchPeople = async() =>{
                             </div>
                             <div class="checkContainer">
                                 <label for="check" class="checkLabel">Complete:</label>
-                                <input type="checkbox" id="check" name="check" onclick="check(${person.id})">
+                                <input type="checkbox" id="check${person.id}" name="check" onclick="check(${person.id})">
                             </div>
                         </section>
                         <div class='buttonContainer'>
@@ -90,7 +92,8 @@ fetchPeople();
 var foundName;
 
 async function check(id){
-    const currentCheck = document.getElementById(`check`)
+    
+    const currentCheck = document.getElementById(`check${id}`)
     const {data} = await axios.get('/api/people')
 
     for(let i = 0; i < data.data.length; i++) {
@@ -99,7 +102,7 @@ async function check(id){
             foundDesc = data.data[i].description
         }
     }
-
+    console.log(currentCheck.checked)
     if(currentCheck.checked){
         fetch(`/api/people/${id}`, {
             method: 'PUT',
