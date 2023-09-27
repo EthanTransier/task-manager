@@ -25,6 +25,6 @@ async function editingTask(){
     fetch(`/api/people/${session}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify({name: input1.value, check: currentPerson.check, desc: input2.value})
+        body: JSON.stringify({name: input1.value, check: false, desc: input2.value})
     })
 }
