@@ -24,34 +24,34 @@ router.put('/:id', (req, res) =>{
     console.log('got request')
     // console.log(check)
     
-    const person = tasks.find((person) => person.id === Number(id))
+    const task = tasks.find((task) => task.id === Number(id))
 
-    if(!person){
+    if(!task){
         return res.json({success:false, data:[]})
     }
 
-    const newtasks = tasks.map((person)=>{
-        if(person.id === Number(id)){
-            person.name = name;
+    const newtasks = tasks.map((task)=>{
+        if(task.id === Number(id)){
+            task.name = name;
         }
         if(check){
-            person.check = check;
+            task.check = check;
         }
-        return person
+        return task
     })
     res.status(202).json({data: newtasks, success:true})
 })
 
 router.delete('/:id', (req, res) =>{
     const {id} = req.params
-    const person = tasks.find((person)=> person.id === Number(id))
+    const task = tasks.find((task)=> task.id === Number(id))
 
-    if(!person){
+    if(!task){
         return res.status(404).json({success:false, msgl:"No Matching ID Found"})
     }
 
-    tasks = tasks.filter((person)=>{
-        return person.id !== Number(id)
+    tasks = tasks.filter((task)=>{
+        return task.id !== Number(id)
     })
     res.status(202).json({data:tasks, success:true})
 })

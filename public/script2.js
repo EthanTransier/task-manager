@@ -49,7 +49,7 @@ const fetchPeople = async() =>{
         })
         result.innerHTML = people.join("")
     }catch (error) {
-        formAlert.textContent = error.response.data.msg
+        console.log(error)
     }
 }
 fetchPeople();

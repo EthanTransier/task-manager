@@ -1,23 +1,22 @@
 const express = require('express');
 const app = express();
-
+require('dotenv').config();
+require('./db/connect')
 // require('dotenv').config();
 const connectDB = require('./db/connect')
 const morgan = require('morgan')
-const people = require('./routes/people-controller')
+const tasks = require('./routes/tasks-controller')
 const auth = require('./routes/auth');
-const connectDB = require('./db/connect');
+// const connectDB = require('./db/connect');
 
 app.use(express.static('./public'))
 // Parse form data
 
 app.use(express.urlencoded({ extended: false}));
 
-connectDB()
-
 app.use(express.json())
 
-app.use('/api/people', people)
+app.use('/api/tasks', tasks)
 app.use('/login', auth)
 
 const serverInit = async ()=>{
