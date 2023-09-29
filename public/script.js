@@ -8,27 +8,27 @@ async function updatedResult() {
         try{
             const selectedID = result.value;
             // console.log(selectedID)
-            const {data} = await axios.get('/api/people')
+            const {data} = await axios.get('/api/tasks')
             // console.log(data.data.length)
-            for(let i = 0; i < data.data.length; i++) {
-                if(data.data[i].id == selectedID) {
+            for(let i = 0; i < data.length; i++) {
+                if(data[i].id == selectedID) {
                     // console.log('running')
-                    if(data.data[i].check == false) {
+                    if(data[i].check == false) {
                         // console.log(data.data[i].description)
                         taskResult.innerHTML = `
                         <section class="allContainer">
                             <div class="divider">
-                                <h3>${data.data[i].name}</h3>
-                                <h5>${data.data[i].description}</h5>
+                                <h3>${data[i].name}</h3>
+                                <h5>${data[i].description}</h5>
                             </div>
                             <div class="checkContainer">
                                 <label for="check" class="checkLabel">Complete:</label>
-                                <input type="checkbox" id="check" name="check" onclick="check(${data.data[i].id})">
+                                <input type="checkbox" id="check" name="check" onclick="check(${data[i].id})">
                             </div>
                         </section>
                         <div class='buttonContainer'>
-                            <button class="btn"><a href="edit.html" onclick="editTask('${data.data[i].id}')">Edit</a></button>
-                            <button class="btn" onclick="deletePerson('${data.data[i].id}')">Delete</button>
+                            <button class="btn"><a href="edit.html" onclick="editTask('${data[i].id}')">Edit</a></button>
+                            <button class="btn" onclick="deleteTask('${data[i].id}')">Delete</button>
                         </div>
                         `
                         taskResult.classList.remove('greyedOut')
@@ -37,17 +37,17 @@ async function updatedResult() {
                         taskResult.innerHTML = `
                         <section class="allContainer">
                             <div class="divider">
-                                <h3 class="crossout">${data.data[i].name}</h3>
-                                <h5 class="crossout">${data.data[i].description}</h5>
+                                <h3 class="crossout">${data[i].name}</h3>
+                                <h5 class="crossout">${data[i].description}</h5>
                             </div>
                             <div class="checkContainer">
                                 <label for="check" class="checkLabel">Complete:</label>
-                                <input type="checkbox" id="check" name="check" onclick="check(${data.data[i].id})" checked>
+                                <input type="checkbox" id="check" name="check" onclick="check(${data[i].id})" checked>
                             </div>
                         </section>
                         <div class='buttonContainer'>
                             <button class="btn disabled" disabled">Edit</button>
-                            <button class="btn disabled" onclick="deletePerson('${data.data[i].id}')" disabled>Delete</button>
+                            <button class="btn disabled" onclick="deleteTask('${data[i].id}')" disabled>Delete</button>
                         </div>
                         `
                         taskResult.classList.add('greyedOut')
@@ -69,28 +69,26 @@ var foundName;
 
 async function check(id){
     const currentCheck = document.getElementById(`check`)
-    const {data} = await axios.get('/api/people')
+    const {data} = await axios.get('/api/tasks')
+    console.log(data)
 
-    for(let i = 0; i < data.data.length; i++) {
-        if(id == data.data[i].id){
-            foundName = data.data[i].name
-            foundDesc = data.data[i].description
+    for(let i = 0; i < data.length; i++) {
+        if(id == data[i].id){
+            foundName = data[i].name
+            foundDesc = data[i].description
         }
     }
     console.log(foundDesc)
     if(currentCheck.checked){
-        // console.log('running check checked')
-        fetch(`/api/people/${id}`, {
+        fetch(`/api/tasks/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({name: foundName, check: true, description: foundDesc})
         })
         updatedResult()
-        // const {data} = await axios.get('/api/people')
         
     }else if(!currentCheck.checked){
-        // console.log('running check Not checked')
-        fetch(`/api/people/${id}`, {
+        fetch(`/api/tasks/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({name: foundName, check: false, description: foundDesc})
@@ -101,20 +99,19 @@ async function check(id){
 }
 
 
-const fetchPeople = async() =>{
+const fetchTasks = async() =>{
     try{
-        const {data} = await axios.get('/api/people')
-        // console.log(data)
+        const {data} = await axios.get('/api/tasks')
 
-        const people = data.data.map((person)=>{
-            return `<option value='${person.id}'>${person.name}</option>`
+        const tasks = data.map((task)=>{
+            return `<option value='${task.id}'>${task.name}</option>`
         })
-        result.innerHTML = `<option value='default'>Select</option>${people.join("")}`
+        result.innerHTML = `<option value='default'>Select</option>${tasks.join("")}`
     }catch (error) {
         formAlert.textContent = error.response.data.msg
     }
 }
-fetchPeople();
+fetchTasks();
 
 
 // HTML Submit Form
@@ -122,57 +119,20 @@ const btn = document.querySelector(".submit-btn")
 const input = document.querySelector(".form-input")
 const formAlert = document.querySelector(".form-alert")
 
-// btn.addEventListener("click", async (e)=>{
-//     e.preventDefault()
-//     const nameValue = input.value
-    
-//     try {
-//         if(editMode == false) {
-//             const {data} = await axios.post("api/people", {name: nameValue})
-//             const h5 = document.createElement("h5");
-//             h5.textContent = data.person;
-//             result.appendChild(h5)
-//             fetchPeople();
-//         }else {
-//             const name = input.value;
-//             console.log(currentPersonID)
-//             fetch(`/api/people/${currentPersonID}`, {
-//                 method: 'PUT',
-//                 headers: { 'Content-Type': 'application/json'},
-//                 body: JSON.stringify({name: name})
-//             })
-//             fetchPeople();
-//             editMode = false;
-//         }
-        
-//     } catch (error){
-//         console.log(error)
-//         // formAlert.textContent = error.response.data.msg
-//     }
-//     input.value = ""
-// })
-
 var editMode = false;
-var currentPersonID = '';
+var currentTaskID = '';
 
-// function editPerson(personName, personID){
-//     editMode = true;
-//     input.value = personName;
-//     currentPersonID = personID;
-    
-// }
-
-function editTask(personID){
-    sessionStorage.setItem('taskID', personID)
+function editTask(taskID){
+    sessionStorage.setItem('taskID', taskID)
 }
 
-function deletePerson(personID){
-    fetch(`/api/people/${personID}`, {
+function deleteTask(taskID){
+    fetch(`/api/tasks/${taskID}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json'},
         // body: JSON.stringify({name: name})
     })
-    fetchPeople();
+    fetchTasks();
     taskResult.innerHTML = ''
 }
 
