@@ -6,6 +6,7 @@ require('./db/connect')
 const connectDB = require('./db/connect')
 const morgan = require('morgan')
 const tasks = require('./routes/tasks-controller')
+const people = require('./routes/people-controller')
 const auth = require('./routes/auth');
 // const connectDB = require('./db/connect');
 
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: false}));
 app.use(express.json())
 
 app.use('/api/tasks', tasks)
+app.use('/api/people', people)
 app.use('/login', auth)
 
 const serverInit = async ()=>{

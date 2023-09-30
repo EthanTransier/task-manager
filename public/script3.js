@@ -7,9 +7,9 @@ async function getTask(){
     const {data} = await axios.get('/api/tasks')
     console.log(data)
 
-    for(let i = 0; i < data.data.length; i++) {
-        if(data.data[i].id == session){
-            currentTask = data.data[i]
+    for(let i = 0; i < data.length; i++) {
+        if(data[i]._id == session){
+            currentTask = data[i]
         }
     }
 
@@ -25,6 +25,6 @@ async function editingTask(){
     fetch(`/api/tasks/${session}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify({name: input1.value, check: false, desc: input2.value})
+        body: JSON.stringify({name: input1.value, check: false, description: input2.value})
     })
 }

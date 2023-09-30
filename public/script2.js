@@ -3,14 +3,14 @@ const result = document.querySelector(".result")
 const fetchTasks = async() =>{
     try{
         const {data} = await axios.get('/api/tasks')
-        console.log(data)
+        // console.log(data)
 
         const tasks = data.map((task)=>{
-            console.log('checking the task')
+            console.log(task._id)
             if(task.check == true){
-                console.log('test 1')
+                // console.log('test 1')
                 return `
-                <section class="taskResult greyedOut">
+                <section class="taskResult greyedOut" id='${task._id}'>
                     <section class="allContainer">
                             <div class="divider">
                                 <h3 class="crossout">${task.name}</h3>
@@ -18,17 +18,17 @@ const fetchTasks = async() =>{
                             </div>
                             <div class="checkContainer">
                                 <label for="check" class="checkLabel">Complete:</label>
-                                <input type="checkbox" id="check${task.id}" name="check" onclick="check(${task.id})" checked>
+                                <input type="checkbox" id="check${task._id}" name="check" onclick="check('${task._id}')" checked>
                             </div>
                         </section>
                         <div class='buttonContainer'>
-                            <button class="btn disabled" onclick="editTask('${task.name}','${task.id}') disabled">Edit</button>
-                            <button class="btn disabled" onclick="deleteTask('${task.id}')">Delete</button>
+                            <button class="btn disabled" onclick="editTask('${task.name}','${task._id}') disabled">Edit</button>
+                            <button class="btn disabled" onclick="deleteTask('${task._id}')">Delete</button>
                         </div>
                     </section>`
             }else{
                 return `
-                <section class="taskResult">
+                <section class="taskResult" id='${task._id}'>
                     <section class="allContainer">
                             <div class="divider">
                                 <h3>${task.name}</h3>
@@ -36,12 +36,12 @@ const fetchTasks = async() =>{
                             </div>
                             <div class="checkContainer">
                                 <label for="check" class="checkLabel">Complete:</label>
-                                <input type="checkbox" id="check${task.id}" name="check" onclick="check(${task.id})">
+                                <input type="checkbox" id="check${task._id}" name="check" onclick="check('${task._id}')">
                             </div>
                         </section>
                         <div class='buttonContainer'>
-                            <button class="btn"><a href="edit.html" onclick="editTask('${task.id}')">Edit</a></button>
-                            <button class="btn" onclick="deleteTask('${task.id}')">Delete</button>
+                            <button class="btn"><a href="edit.html" onclick="editTask('${task._id}')">Edit</a></button>
+                            <button class="btn" onclick="deleteTask('${task._id}')">Delete</button>
                         </div>
                     </section>`
             }
@@ -56,34 +56,64 @@ fetchTasks();
 
 var foundName;
 
-async function check(id){
+async function check(currentID){
     
-    const currentCheck = document.getElementById(`check${id}`)
+    const currentCheck = document.getElementById(`check${currentID}`)
     const {data} = await axios.get('/api/tasks')
 
     for(let i = 0; i < data.length; i++) {
-        if(id == data[i].id){
+        if(currentID == data[i]._id){
             foundName = data[i].name
             foundDesc = data[i].description
         }
     }
-    console.log(currentCheck.checked)
+    // console.log(currentCheck.checked)
+    console.log(currentID)
+
     if(currentCheck.checked){
-        fetch(`/api/tasks/${id}`, {
+        fetch(`/api/tasks/${currentID}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({name: foundName, check: true, description: foundDesc})
         })
-        fetchTasks()
-        // const {data} = await axios.get('/api/tasks')
+        document.getElementById(currentID).innerHTML = `<section class="allContainer">
+            <div class="divider">
+                <h3 class="crossout">${foundName}</h3>
+                <h5 class="crossout">${foundDesc}</h5>
+            </div>
+            <div class="checkContainer">
+                <label for="check" class="checkLabel">Complete:</label>
+                <input type="checkbox" id="check${currentID}" name="check" onclick="check('${currentID}')" checked>
+            </div>
+        </section>
+        <div class='buttonContainer'>
+            <button class="btn disabled" onclick="editTask('${currentID}','${currentID}') disabled">Edit</button>
+            <button class="btn disabled" onclick="deleteTask('${currentID}')">Delete</button>
+        </div>`
+        document.getElementById(currentID).classList.add('greyedOut')
         
     }else {
-        fetch(`/api/tasks/${id}`, {
+        fetch(`/api/tasks/${currentID}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({name: foundName, check: false, description: foundDesc})
         })
-        fetchTasks()
+        // fetchTasks()
+        document.getElementById(currentID).innerHTML = `<section class="allContainer">
+            <div class="divider">
+                <h3>${foundName}</h3>
+                <h5>${foundDesc}</h5>
+            </div>
+            <div class="checkContainer">
+                <label for="check" class="checkLabel">Complete:</label>
+                <input type="checkbox" id="check${currentID}" name="check" onclick="check('${currentID}')">
+            </div>
+        </section>
+        <div class='buttonContainer'>
+            <button class="btn"><a href="edit.html" onclick="editTask('${currentID}')">Edit</a></button>
+            <button class="btn" onclick="deleteTask('${currentID}')">Delete</button>
+        </div>`
+        document.getElementById(currentID).classList.remove('greyedOut')
     }
 }
 

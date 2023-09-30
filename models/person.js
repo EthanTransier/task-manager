@@ -11,7 +11,7 @@ const personSchema = new mongoose.Schema({
         type:Number,
         default:5
     }
-}, {collection: 'task-manager'})
+}, {collection: 'people'})
 
 module.exports = mongoose.model('Person', personSchema)
 // model.find({complete:true})

@@ -26,16 +26,18 @@ const updateTasks = async(req,res)=>{
     const {name, check, description} = req.body;
 
     await Tasks.findOneAndReplace(
-        {id:id}, {name:name, description:description, check:check})
+        {_id:id}, {name:name, description:description, check:check})
 
 }
 
 // Delete Functino for deleting tasks
 const deleteTask = async(req,res)=>{
     const {id} = req.params
-    
-    await Tasks.deleteOne({id: id})
-
+    await Tasks.deleteOne({_id: id})
 }
+
+// const assignTask = async(req,res)=>{
+
+// }
 
 module.exports = {createTasks, readTasks, updateTasks, deleteTask}

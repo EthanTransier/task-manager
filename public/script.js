@@ -11,7 +11,7 @@ async function updatedResult() {
             const {data} = await axios.get('/api/tasks')
             // console.log(data.data.length)
             for(let i = 0; i < data.length; i++) {
-                if(data[i].id == selectedID) {
+                if(data[i]._id == selectedID) {
                     // console.log('running')
                     if(data[i].check == false) {
                         // console.log(data.data[i].description)
@@ -23,12 +23,12 @@ async function updatedResult() {
                             </div>
                             <div class="checkContainer">
                                 <label for="check" class="checkLabel">Complete:</label>
-                                <input type="checkbox" id="check" name="check" onclick="check(${data[i].id})">
+                                <input type="checkbox" id="check" name="check" onclick="check('${data[i]._id}')">
                             </div>
                         </section>
                         <div class='buttonContainer'>
-                            <button class="btn"><a href="edit.html" onclick="editTask('${data[i].id}')">Edit</a></button>
-                            <button class="btn" onclick="deleteTask('${data[i].id}')">Delete</button>
+                            <button class="btn"><a href="edit.html" onclick="editTask('${data[i]._id}')">Edit</a></button>
+                            <button class="btn" onclick="deleteTask('${data[i]._id}')">Delete</button>
                         </div>
                         `
                         taskResult.classList.remove('greyedOut')
@@ -42,12 +42,12 @@ async function updatedResult() {
                             </div>
                             <div class="checkContainer">
                                 <label for="check" class="checkLabel">Complete:</label>
-                                <input type="checkbox" id="check" name="check" onclick="check(${data[i].id})" checked>
+                                <input type="checkbox" id="check" name="check" onclick="check('${data[i]._id}')" checked>
                             </div>
                         </section>
                         <div class='buttonContainer'>
                             <button class="btn disabled" disabled">Edit</button>
-                            <button class="btn disabled" onclick="deleteTask('${data[i].id}')" disabled>Delete</button>
+                            <button class="btn disabled" onclick="deleteTask('${data[i]._id}')" disabled>Delete</button>
                         </div>
                         `
                         taskResult.classList.add('greyedOut')
@@ -73,7 +73,7 @@ async function check(id){
     console.log(data)
 
     for(let i = 0; i < data.length; i++) {
-        if(id == data[i].id){
+        if(id == data[i]._id){
             foundName = data[i].name
             foundDesc = data[i].description
         }
@@ -85,7 +85,24 @@ async function check(id){
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({name: foundName, check: true, description: foundDesc})
         })
-        updatedResult()
+        // updatedResult()
+        taskResult.innerHTML = `
+                        <section class="allContainer">
+                            <div class="divider">
+                                <h3 class="crossout">${foundName}</h3>
+                                <h5 class="crossout">${foundDesc}</h5>
+                            </div>
+                            <div class="checkContainer">
+                                <label for="check" class="checkLabel">Complete:</label>
+                                <input type="checkbox" id="check" name="check" onclick="check('${id}')" checked>
+                            </div>
+                        </section>
+                        <div class='buttonContainer'>
+                            <button class="btn disabled" disabled">Edit</button>
+                            <button class="btn disabled" onclick="deleteTask('${id}')" disabled>Delete</button>
+                        </div>
+                        `
+                        taskResult.classList.add('greyedOut')
         
     }else if(!currentCheck.checked){
         fetch(`/api/tasks/${id}`, {
@@ -93,7 +110,24 @@ async function check(id){
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({name: foundName, check: false, description: foundDesc})
         })
-        updatedResult()
+        taskResult.innerHTML = `
+                        <section class="allContainer">
+                            <div class="divider">
+                                <h3>${foundName}</h3>
+                                <h5>${foundDesc}</h5>
+                            </div>
+                            <div class="checkContainer">
+                                <label for="check" class="checkLabel">Complete:</label>
+                                <input type="checkbox" id="check" name="check" onclick="check('${id}')">
+                            </div>
+                        </section>
+                        <div class='buttonContainer'>
+                            <button class="btn"><a href="edit.html" onclick="editTask('${id}')">Edit</a></button>
+                            <button class="btn" onclick="deleteTask('${id}')">Delete</button>
+                        </div>
+                        `
+                        taskResult.classList.remove('greyedOut')
+        // updatedResult()
     }
     
 }
@@ -104,7 +138,7 @@ const fetchTasks = async() =>{
         const {data} = await axios.get('/api/tasks')
 
         const tasks = data.map((task)=>{
-            return `<option value='${task.id}'>${task.name}</option>`
+            return `<option value='${task._id}'>${task.name}</option>`
         })
         result.innerHTML = `<option value='default'>Select</option>${tasks.join("")}`
     }catch (error) {
