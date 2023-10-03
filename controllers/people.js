@@ -41,13 +41,40 @@ const deletePerson = async(req,res)=>{
 const assignTask = async(req,res)=>{
     const {id} = req.params;
     const {currentTask} = req.body;
-    const {currentPerson} = await People.findOne({id:id})
+    const currentPerson = await People.findOne({id:id})
+    console.log(id)
     const currentTasks = currentPerson.tasks;
     if(!currentTasks.includes(currentTask)){
         currentTasks.push(currentTask)
+        for(let i = 0; i < currentTasks.length; i++){
+            if(currentTasks[i] == "" || currentTasks[i] == null){
+                currentTasks.splice(i, 1)
+            }
+        }
     }
     await People.findOneAndUpdate({id:id}, {tasks: currentTasks})
     res.json("Already Includes Task")
 }
 
-module.exports = {createPeople, readPeople, updatePeople, deletePerson, assignTask}
+const unassignTask = async(req,res)=>{
+    const {id} = req.params;
+    const {currentTask} = req.body;
+    const currentPerson = await People.findOne({id:id})
+    console.log(id)
+    const currentTasks = currentPerson.tasks;
+    if(currentTasks.includes(currentTask)){
+        const index = currentTasks.indexOf(currentTask)
+        currentTasks.splice(index, 1)
+        for(let i = 0; i < currentTasks.length; i++){
+            if(currentTasks[i] == "" || currentTasks[i] == null){
+                currentTasks.splice(i, 1)
+            }
+        }
+    }
+    await People.findOneAndUpdate({id:id}, {tasks: currentTasks})
+    res.json("Already Includes Task")
+}
+
+
+
+module.exports = {createPeople, readPeople, updatePeople, deletePerson, assignTask, unassignTask}

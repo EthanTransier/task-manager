@@ -8,9 +8,14 @@ const fetchPeople = async() =>{
         for(let i = 0; i < tasks.length; i++){
                 options.push(`<option value="${tasks[i].name}">${tasks[i].name}</option>`)
             }
+            let personTask;
         const people = data.map((person)=>{
-            console.log(person._id)
-            
+            console.log(person.tasks.length)
+            if(person.tasks.length <= 1){
+                personTask = 'None'
+            }else{
+                personTask = person.tasks
+            }
 
             return `
             <section class="personResult" id='${person._id}'>
@@ -18,18 +23,24 @@ const fetchPeople = async() =>{
                         <div class="divider">
                             <h3>${person.name}</h3>
                             <h5>Age: ${person.age}</h5>
-                            <h5>Current Tasks: ${person.tasks}</h5>
+                            <h5>Current Tasks: ${personTask}</h5>
                         </div>
                     </section>
                     <div class='buttonContainer'>
                         <div>
-                            <select id="select${person.id}">
+                            <select id="assign${person.id}">
                                 ${options.join('')}
                             </select>   
                             <button class="btn" onclick="assignTask('${person.id}')">Assign Task</button>
                         </div>
-                        <button class="btn" onclick="deletePerson('${person._id}')">Delete</button>
+                        <div>
+                            <select id="unassign${person.id}">
+                                ${options.join('')}
+                            </select>   
+                            <button class="btn" onclick="unassignTask('${person.id}')">Unassign Task</button>
+                        </div>
                     </div>
+                    <button class="btn deletebtn" onclick="deletePerson('${person._id}')">Remove Person</button>
                 </section>`
     })
         result.innerHTML = people.join("")
@@ -38,74 +49,6 @@ const fetchPeople = async() =>{
     }
 }
 fetchPeople();
-
-var foundName;
-
-async function check(currentID){
-    
-    const currentCheck = document.getElementById(`check${currentID}`)
-    const {data} = await axios.get('/api/people')
-
-    for(let i = 0; i < data.length; i++) {
-        if(currentID == data[i]._id){
-            foundName = data[i].name
-            foundDesc = data[i].description
-        }
-    }
-    // console.log(currentCheck.checked)
-    console.log(currentID)
-
-    if(currentCheck.checked){
-        fetch(`/api/people/${currentID}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({name: foundName, check: true, description: foundDesc})
-        })
-        document.getElementById(currentID).innerHTML = `<section class="allContainer">
-            <div class="divider">
-                <h3 class="crossout">${foundName}</h3>
-                <h5 class="crossout">${foundDesc}</h5>
-            </div>
-            <div class="checkContainer">
-                <label for="check" class="checkLabel">Complete:</label>
-                <input type="checkbox" id="check${currentID}" name="check" onclick="check('${currentID}')" checked>
-            </div>
-        </section>
-        <div class='buttonContainer'>
-            <button class="btn disabled" onclick="assignTask('${currentID}','${currentID}') disabled">Assign Tasks</button>
-            <button class="btn disabled" onclick="deletePerson('${currentID}')">Delete</button>
-        </div>`
-        document.getElementById(currentID).classList.add('greyedOut')
-        
-    }else {
-        fetch(`/api/people/${currentID}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({name: foundName, check: false, description: foundDesc})
-        })
-        // fetchPeople()
-        document.getElementById(currentID).innerHTML = `<section class="allContainer">
-            <div class="divider">
-                <h3>${foundName}</h3>
-                <h5>${foundDesc}</h5>
-            </div>
-            <div class="checkContainer">
-                <label for="check" class="checkLabel">Complete:</label>
-                <input type="checkbox" id="check${currentID}" name="check" onclick="check('${currentID}')">
-            </div>
-        </section>
-        <div class='buttonContainer'>
-            <button class="btn"><a href="edit.html" onclick="editPerson('${currentID}')">Edit</a></button>
-            <button class="btn" onclick="deletePerson('${currentID}')">Delete</button>
-        </div>`
-        document.getElementById(currentID).classList.remove('greyedOut')
-    }
-}
-
-var editMode = false;
-var currentPersonID = '';
-
-
 
 function deletePerson(personID){
     fetch(`/api/people/${personID}`, {
@@ -120,12 +63,24 @@ function deletePerson(personID){
 
 async function assignTask(personID){
     console.log(personID)
-    const select = document.getElementById(`select${personID}`);
+    const select = document.getElementById(`assign${personID}`);
     console.log(select)
     fetch(`/api/people/${personID}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json'},
-        body: select.value
+        body: JSON.stringify({currentTask: select.value})
+    })
+    fetchPeople();
+}
+
+async function unassignTask(personID){
+    console.log(personID)
+    const select = document.getElementById(`unassign${personID}`);
+    console.log(select)
+    fetch(`/api/people/unassign/${personID}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify({currentTask: select.value})
     })
     fetchPeople();
 }

@@ -3,8 +3,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 mongoose.connect(process.env.MONGO_URI)
 
-const task = require('./models/task.js');
-const tasks = [
+const Task = require('./models/task.js');
+const tasksData = [
   {
     id: 1,
     name: "Task 1",
@@ -64,10 +64,70 @@ const tasks = [
     name: "Task 10",
     description: "Description for Task 10",
     check: false
+  },
+  {
+    id: 11,
+    name: "Task 11",
+    description: "Description for Task 11",
+    check: false
+  },
+  {
+  id: 12,
+    name: "Task 12",
+    description: "Description for Task 12",
+    check: false
+  },
+  {
+    id: 13,
+    name: "Task 13",
+    description: "Description for Task 13",
+    check: false
+  },
+  {
+    id: 14,
+    name: "Task 14",
+    description: "Description for Task 14",
+    check: false
+  },
+{
+    id: 15,
+    name: "Task 15",
+    description: "Description for Task 15",
+    check: false
+  },
+{
+    id: 16,
+    name: "Task 16",
+    description: "Description for Task 16",
+    check: false
+  },
+{
+    id: 17,
+    name: "Task 17",
+    description: "Description for Task 17",
+    check: false
+  },
+{
+    id: 18,
+    name: "Task 18",
+    description: "Description for Task 18",
+    check: false
+  },
+{
+    id: 19,
+    name: "Task 19",
+    description: "Description for Task 19",
+    check: false
+  },
+{
+    id: 20,
+    name: "Task 20",
+    description: "Description for Task 20",
+    check: false
   },
 ];
 
-module.exports = {tasks}
+module.exports = {tasksData}
 
 // async function test(){
 //     for(let i=0; i<tasks.length; i++){

@@ -433,6 +433,14 @@ h5 + h5 {
   margin-bottom: 0;
 }
 
+.deletebtn{
+  margin-top: 1rem;
+  background-color: rgb(255, 70, 70);
+}
+.deletebtn:hover{
+  background-color: rgb(210, 0, 0);
+}
+
 /* .result2{
   width: 50%;
   display: flex;
