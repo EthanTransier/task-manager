@@ -67,6 +67,8 @@ const tasks = [
   },
 ];
 
+module.exports = {tasks}
+
 // async function test(){
 //     for(let i=0; i<tasks.length; i++){
 //         const insert = new task(tasks[i]);

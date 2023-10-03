@@ -25,8 +25,10 @@ const updatePeople = async(req,res)=>{
     const {id} = req.params
     const {name, age} = req.body;
 
+    const person = People.findOne({_id:id})
+
     await People.findOneAndReplace(
-        {_id:id}, {name:name, age:age})
+        {_id:id}, {name:name, age:age, id:person.id})
 
 }
 
@@ -37,7 +39,15 @@ const deletePerson = async(req,res)=>{
 }
 
 const assignTask = async(req,res)=>{
-
+    const {id} = req.params;
+    const {currentTask} = req.body;
+    const {currentPerson} = await People.findOne({id:id})
+    const currentTasks = currentPerson.tasks;
+    if(!currentTasks.includes(currentTask)){
+        currentTasks.push(currentTask)
+    }
+    await People.findOneAndUpdate({id:id}, {tasks: currentTasks})
+    res.json("Already Includes Task")
 }
 
 module.exports = {createPeople, readPeople, updatePeople, deletePerson, assignTask}

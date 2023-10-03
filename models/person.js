@@ -10,6 +10,14 @@ const personSchema = new mongoose.Schema({
     age:{
         type:Number,
         default:5
+    },
+    id:{
+        type:Number,
+        default:1
+    },
+    tasks:{
+        type:Array,
+        default: []
     }
 }, {collection: 'people'})
 

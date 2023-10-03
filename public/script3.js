@@ -1,6 +1,8 @@
 var session = sessionStorage.getItem('taskID')
 console.log(session)
 
+
+
 var currentTask;
 
 async function getTask(){
