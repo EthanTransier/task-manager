@@ -15,9 +15,9 @@ const personSchema = new mongoose.Schema({
         type:Number,
         default:1
     },
-    tasks:{
-        type:Array,
-        default: []
+    task:{
+        type:String,
+        default: "none"
     }
 }, {collection: 'people'})
 

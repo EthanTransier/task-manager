@@ -23,13 +23,24 @@
         </div>
     </nav>
     <main>
-        <div class="result result2"></div>
+        <form>
+            <h3>Editing: <span class="personName" id="personName"></span></h3>
+            <div class="form-row">
+                <label for="name">Enter New Name</label>
+                <input type="text" name="name" id="nameInput" class="form-input" autocomplete="false">
+                <small class="form-alert"></small>
+                <label for="age">Enter New Age</label>
+                <input type="text" name="age" id="ageInput" class="form-input" autocomplete="false">
+                <small class="form-alert"></small>
+            </div>
+            <button type="submit" class="block submit-btn" onclick="editingPerson()">Submit</button>
+
+        </form>
     </main>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
         integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
         crossorigin="anonymous"></script>
-    <script src="script2.js"></script>
+    <script src="./script5.js"></script>
 </body>
 
 </html>

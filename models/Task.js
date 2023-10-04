@@ -15,6 +15,16 @@ const TaskSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
         trim: true,
+    },
+    assigned: {
+        type: Boolean,
+        default: false,
+        trim: true,
+    },
+    id: {
+        type: Number,
+        default: 0,
+        trim: true,
     } 
 }, {collection: 'task-manager'})
 

@@ -6,11 +6,11 @@ const fetchTasks = async() =>{
         // console.log(data)
 
         const tasks = data.map((task)=>{
-            console.log(task._id)
+            console.log(task.id)
             if(task.check == true){
                 // console.log('test 1')
                 return `
-                <section class="taskResult greyedOut" id='${task._id}'>
+                <section class="taskResult greyedOut" id='${task.id}'>
                     <section class="allContainer">
                             <div class="divider">
                                 <h3 class="crossout">${task.name}</h3>
@@ -18,17 +18,17 @@ const fetchTasks = async() =>{
                             </div>
                             <div class="checkContainer">
                                 <label for="check" class="checkLabel">Complete:</label>
-                                <input type="checkbox" id="check${task._id}" name="check" onclick="check('${task._id}')" checked>
+                                <input type="checkbox" id="check${task.id}" name="check" onclick="check('${task.id}')" checked>
                             </div>
                         </section>
                         <div class='buttonContainer'>
-                            <button class="btn disabled" onclick="editTask('${task.name}','${task._id}') disabled">Edit</button>
-                            <button class="btn disabled" onclick="deleteTask('${task._id}')">Delete</button>
+                            <button class="btn disabled" onclick="editTask('${task.name}','${task.id}') disabled">Edit</button>
+                            <button class="btn disabled" onclick="deleteTask('${task.id}')">Delete</button>
                         </div>
                     </section>`
             }else{
                 return `
-                <section class="taskResult" id='${task._id}'>
+                <section class="taskResult" id='${task.id}'>
                     <section class="allContainer">
                             <div class="divider">
                                 <h3>${task.name}</h3>
@@ -36,12 +36,12 @@ const fetchTasks = async() =>{
                             </div>
                             <div class="checkContainer">
                                 <label for="check" class="checkLabel">Complete:</label>
-                                <input type="checkbox" id="check${task._id}" name="check" onclick="check('${task._id}')">
+                                <input type="checkbox" id="check${task.id}" name="check" onclick="check('${task.id}')">
                             </div>
                         </section>
                         <div class='buttonContainer'>
-                            <button class="btn"><a href="edit.html" onclick="editTask('${task._id}')">Edit</a></button>
-                            <button class="btn" onclick="deleteTask('${task._id}')">Delete</button>
+                            <button class="btn"><a href="edit.html" onclick="editTask('${task.id}')">Edit</a></button>
+                            <button class="btn" onclick="deleteTask('${task.id}')">Delete</button>
                         </div>
                     </section>`
             }
@@ -62,7 +62,7 @@ async function check(currentID){
     const {data} = await axios.get('/api/tasks')
 
     for(let i = 0; i < data.length; i++) {
-        if(currentID == data[i]._id){
+        if(currentID == data[i].id){
             foundName = data[i].name
             foundDesc = data[i].description
         }
@@ -133,3 +133,9 @@ function deleteTask(taskID){
     fetchTasks();
 }
 
+// function deleteAll(){
+//     fetch(`/api/tasks/deletemany/`, {
+//         method: 'DELETE',
+//         headers: { 'Content-Type': 'application/json'},
+//     })
+// }

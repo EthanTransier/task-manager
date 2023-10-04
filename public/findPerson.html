@@ -15,7 +15,7 @@
             <h5>HTTP Methods</h5>
             <div>
                 <a href="index.html">Regular</a>
-                <a href="javascript.html">JS</a>
+                <a href="javascript.html">Find Task</a>
                 <a href="findPerson.html">Find Person</a>
                 <a href="allTasks.html">All Tasks</a>
                 <a href="allPeople.html">All People</a>
@@ -23,13 +23,30 @@
         </div>
     </nav>
     <main>
-        <div class="result result2"></div>
+        <section>
+            <form>
+                <h3>Find Person</h3>
+                <div class="dropdownContainer">
+                    <label for="tasks" class="tasksLabel">Choose a task: </label>
+                    <select name="tasks" id="people" class="resultDropdown" onchange="updatedResult()">
+                        <option value="Select">Select</option>
+                    </select>
+                </div>
+
+            </form>
+            <section class="personResult" id="personResult">
+
+            </section>
+
+
+
+            <!-- <div class="result"></div> -->
+        </section>
     </main>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
         integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
         crossorigin="anonymous"></script>
-    <script src="script2.js"></script>
+    <script src="script6.js"></script>
 </body>
 
 </html>

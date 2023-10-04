@@ -23,18 +23,29 @@ const createTasks = async (req,res)=>{
 // Put function for update Tasks
 const updateTasks = async(req,res)=>{
     const {id} = req.params
-    const {name, check, description} = req.body;
+    const currentTask = await Tasks.findOne({id:id})
+    const {name, description} = req.body;
 
     await Tasks.findOneAndReplace(
-        {_id:id}, {name:name, description:description, check:check})
+        {id:id}, {name:name, description:description, check:currentTask.check, assigned: currentTask.assigned, id:id},)
 
 }
 
 // Delete Functino for deleting tasks
 const deleteTask = async(req,res)=>{
     const {id} = req.params
-    await Tasks.deleteOne({_id: id})
+    await Tasks.deleteOne({id: id})
 }
+
+// const deleteManyTask = async(req,res)=>{
+//     // const {id} = req.params
+
+//     for(let i = 0; i < tasks.length; i++){
+//         await Tasks.deleteOne({check: false})
+//     }
+    
+// }
+
 
 // const assignTask = async(req,res)=>{
 

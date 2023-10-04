@@ -6,24 +6,17 @@ const fetchPeople = async() =>{
         const tasks = await axios.get('/api/tasks').then((res) => {return res.data})
         let options = [];
         for(let i = 0; i < tasks.length; i++){
-                options.push(`<option value="${tasks[i].name}">${tasks[i].name}</option>`)
-            }
+            options.push(`<option value="${tasks[i].name}">${tasks[i].name}</option>`)
+        }
             let personTask;
         const people = data.map((person)=>{
-            console.log(person.tasks.length)
-            if(person.tasks.length <= 1){
-                personTask = 'None'
-            }else{
-                personTask = person.tasks
-            }
-
             return `
-            <section class="personResult" id='${person._id}'>
+            <section class="personResult" id='${person.id}'>
                 <section class="allContainer">
-                        <div class="divider">
-                            <h3>${person.name}</h3>
+                        <div class="divider personDivider">
+                            <h3 class="personName">${person.name}<button class="personEdit"><a href="editPeople.html" onclick="editPerson(${person.id})">Edit</a></button></h3>
                             <h5>Age: ${person.age}</h5>
-                            <h5>Current Tasks: ${personTask}</h5>
+                            <h5>Current Task: ${person.task}</h5>
                         </div>
                     </section>
                     <div class='buttonContainer'>
@@ -40,7 +33,7 @@ const fetchPeople = async() =>{
                             <button class="btn" onclick="unassignTask('${person.id}')">Unassign Task</button>
                         </div>
                     </div>
-                    <button class="btn deletebtn" onclick="deletePerson('${person._id}')">Remove Person</button>
+                    <button class="btn deletebtn" onclick="deletePerson('${person.id}')">Remove Person</button>
                 </section>`
     })
         result.innerHTML = people.join("")
@@ -59,6 +52,12 @@ function deletePerson(personID){
     fetchPeople();
 }
 
+var editMode = false;
+var currentPersonID = '';
+
+function editPerson(personID){
+    sessionStorage.setItem('personID', personID)
+}
 
 
 async function assignTask(personID){

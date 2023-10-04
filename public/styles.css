@@ -447,3 +447,21 @@ h5 + h5 {
   flex-direction: column;
 } */
 
+.personName{
+  display: flex;
+  color: #0f5132;
+  justify-content: space-between;
+}
+.personDivider{
+  width: 100%;
+}
+
+.personEdit{
+  background-color: rgb(0, 192, 0);
+}
+.personEdit:hover{
+  background-color: rgb(0, 133, 0);
+}
+a{
+  color: white;
+}
