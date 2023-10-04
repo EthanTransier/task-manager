@@ -42,15 +42,12 @@ const assignTask = async(req,res)=>{
     const {id} = req.params;
     const {currentTask} = req.body;
     const currentPerson = await People.findOne({id:id})
-    // console.log(id)
     var finalTask = ""
     if(currentTask == currentPerson.task){
         finalTask = currentPerson.task
     }else{
         finalTask = currentTask;
     }
-    
-    
     await People.findOneAndUpdate({id:id}, {task: finalTask})
     res.json("Already Includes Task")
 }

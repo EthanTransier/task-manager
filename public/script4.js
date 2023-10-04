@@ -8,7 +8,6 @@ const fetchPeople = async() =>{
         for(let i = 0; i < tasks.length; i++){
             options.push(`<option value="${tasks[i].name}">${tasks[i].name}</option>`)
         }
-            let personTask;
         const people = data.map((person)=>{
             return `
             <section class="personResult" id='${person.id}'>
