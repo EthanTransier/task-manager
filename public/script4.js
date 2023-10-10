@@ -15,7 +15,7 @@ const fetchPeople = async() =>{
                         <div class="divider personDivider">
                             <h3 class="personName">${person.name}<button class="personEdit"><a href="editPeople.html" onclick="editPerson(${person.id})">Edit</a></button></h3>
                             <h5>Age: ${person.age}</h5>
-                            <h5>Current Task: ${person.task}</h5>
+                            <h5>Current Task: <span id="currentTask-${person.id}">${person.task}</span></h5>
                         </div>
                     </section>
                     <div class='buttonContainer'>
@@ -25,10 +25,7 @@ const fetchPeople = async() =>{
                             </select>   
                             <button class="btn" onclick="assignTask('${person.id}')">Assign Task</button>
                         </div>
-                        <div>
-                            <select id="unassign${person.id}">
-                                ${options.join('')}
-                            </select>   
+                        <div>  
                             <button class="btn" onclick="unassignTask('${person.id}')">Unassign Task</button>
                         </div>
                     </div>
@@ -60,25 +57,21 @@ function editPerson(personID){
 
 
 async function assignTask(personID){
-    console.log(personID)
     const select = document.getElementById(`assign${personID}`);
-    console.log(select)
     fetch(`/api/people/${personID}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({currentTask: select.value})
     })
-    fetchPeople();
+    // fetchPeople();
+    document.getElementById(`currentTask-${personID}`).innerHTML = select.value
 }
 
 async function unassignTask(personID){
-    console.log(personID)
-    const select = document.getElementById(`unassign${personID}`);
-    console.log(select)
     fetch(`/api/people/unassign/${personID}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify({currentTask: select.value})
     })
-    fetchPeople();
+    // fetchPeople();
+    document.getElementById(`currentTask-${personID}`).innerHTML = "None"
 }

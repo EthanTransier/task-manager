@@ -15,19 +15,9 @@ const TaskSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
         trim: true,
-    },
-    assigned: {
-        type: Boolean,
-        default: false,
-        trim: true,
-    },
-    id: {
-        type: Number,
-        default: 0,
-        trim: true,
     } 
 }, {collection: 'task-manager'})
 
-const task = mongoose.model('Task', TaskSchema) 
+const Task = mongoose.model('Task', TaskSchema) 
 
-module.exports = task
+module.exports = Task
